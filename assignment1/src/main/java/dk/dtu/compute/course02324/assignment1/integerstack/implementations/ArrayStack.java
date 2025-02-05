@@ -85,14 +85,16 @@ public class ArrayStack implements Stack {
 		if (array[0] != null) {
 			ExpandArray(array);
 		}
-		for (int i = 0; i < array.length; i++) {
-			
+		for (int i = 0; i < array.length-1; i++) {
+			array[i+1] = array[i];
 		}
+		array[array.length] = value;
 	}
 
 	@Override
 	public int size() {
-		return array.length;
+		size = array.length;
+		return size;
 	}
 
 }
