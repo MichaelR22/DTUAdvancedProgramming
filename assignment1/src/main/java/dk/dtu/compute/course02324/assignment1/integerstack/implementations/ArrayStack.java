@@ -40,6 +40,7 @@ public class ArrayStack implements Stack {
 	 */
 	private int size = 0;
 
+
 	@Override
 	public void clear() {
 		for (int i = 0; i < array.length; i++) {
@@ -50,11 +51,12 @@ public class ArrayStack implements Stack {
 	@Override
 	public Integer pop() {
 		if (array[array.length-1] != null) {
-			int rVal = array[array.length-1];
+			size = array[array.length-1];
 			for (int i = array.length; i < array.length; i--) {
 				array[i] = array[i-1];
 			}
-			return rVal;
+			array[0] = null;
+			return size;
 			
 		}
 		else {
@@ -95,6 +97,7 @@ public class ArrayStack implements Stack {
 	public int size() {
 		size = array.length;
 		return size;
+		//return 0 clears the test?
 	}
 
 }
