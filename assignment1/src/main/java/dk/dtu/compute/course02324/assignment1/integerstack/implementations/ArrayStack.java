@@ -58,7 +58,11 @@ public class ArrayStack implements Stack {
 
 	@Override
 	public Integer top() {
-		return (size == 0) ? null : array[size - 1];
+		if (size == 0) {
+			return null;
+		} else {
+			return array[size - 1];
+		}
 	}
 
 	@Override
@@ -74,4 +78,3 @@ public class ArrayStack implements Stack {
 		return size;
 	}
 }
-//ddd
