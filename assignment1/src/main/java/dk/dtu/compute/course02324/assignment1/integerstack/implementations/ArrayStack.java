@@ -50,10 +50,10 @@ public class ArrayStack implements Stack {
 	@Override
 	public Integer pop() {
 		if (size == 0) return null;
-		Integer topValue = array[size - 1];
+		Integer topValue1 = array[size - 1];
 		array[size - 1] = null;
 		size--;
-		return topValue;
+		return topValue1;
 	}
 
 	@Override
