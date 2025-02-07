@@ -40,7 +40,6 @@ public class ArrayStack implements Stack {
 	 * element should be located at <code>size-1</code> in this array.
 	 */
 	private int size = 0;
-	private int topValue;
 
 
 	@Override
@@ -53,13 +52,13 @@ public class ArrayStack implements Stack {
 	@Override
 	public Integer pop() {
 		if (array[array.length-1] != null) {
-			topValue = array[array.length-1];
-			for (int i = array.length; i > 1; i--) {
-				array[i-1] = array[i-2];
-			}
-			array[0] = null;
+//			topValue = array[array.length-1];
+//			for (int i = array.length; i > 1; i--) {
+//				array[i-1] = array[i-2];
+//			}
+
 			size--;
-			return topValue;
+			return size;
 			
 		}
 		else {
@@ -70,7 +69,7 @@ public class ArrayStack implements Stack {
 	@Override
 	public Integer top() {
 		if (array[array.length-1] != null) {
-			return topValue = array[array.length-1];
+			return array[size-1];
 		}
 		else {
 			return null;
@@ -90,18 +89,15 @@ public class ArrayStack implements Stack {
 		if (array[0] != null) {
 			ExpandArray(array);
 		}
-		for (int i = 0; i < array.length-1; i++) {
-			array[i] = array[i+1];
-		}
-		size++;
-		array[array.length-1] = value;
+//		for (int i = 0; i < array.length-1; i++) {
+//			array[i] = array[i+1];
+//		}
+
+		array[size++] = value;
 	}
 
 	@Override
 	public int size() {
-		//size = array.length;
 		return size;
-		//return 0 clears the test?
 	}
-
 }
