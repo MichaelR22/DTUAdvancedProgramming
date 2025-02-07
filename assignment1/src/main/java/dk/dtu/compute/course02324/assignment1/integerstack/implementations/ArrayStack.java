@@ -9,7 +9,7 @@ import java.util.Arrays;
  * current length of the array.
  *
  * TODO note that this is template only, and the actual functions of
- *       the stack are not implemented yet. Impelenting these methods
+ *       the stack are not implemented yet. Implementing these methods
  *       is the task of assignment 1.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
