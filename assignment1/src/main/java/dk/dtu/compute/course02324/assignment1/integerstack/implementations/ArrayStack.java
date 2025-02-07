@@ -2,6 +2,7 @@ package dk.dtu.compute.course02324.assignment1.integerstack.implementations;
 
 import dk.dtu.compute.course02324.assignment1.integerstack.types.Stack;
 
+
 /**
  * Implements a {@link Stack} of integers by using a sufficiently large
  * array. Note that the array needs to be dynamically extended by
@@ -9,7 +10,7 @@ import dk.dtu.compute.course02324.assignment1.integerstack.types.Stack;
  * current length of the array.
  *
  * TODO note that this is template only, and the actual functions of
- *       the stack are not implemented yet. Impelemnting these methods
+ *       the stack are not implemented yet. Implementing these methods
  *       is the task of assignment 1.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
@@ -39,24 +40,26 @@ public class ArrayStack implements Stack {
 	 * element should be located at <code>size-1</code> in this array.
 	 */
 	private int size = 0;
+	private int topValue;
 
 
 	@Override
 	public void clear() {
 		for (int i = 0; i < array.length; i++) {
-			array[i] = null; 
+			array[i] = null;
 		}
 	}
 
 	@Override
 	public Integer pop() {
 		if (array[array.length-1] != null) {
-			size = array[array.length-1];
-			for (int i = array.length; i < array.length; i--) {
-				array[i] = array[i-1];
+			topValue = array[array.length-1];
+			for (int i = array.length; i > 1; i--) {
+				array[i-1] = array[i-2];
 			}
 			array[0] = null;
-			return size;
+			size--;
+			return topValue;
 			
 		}
 		else {
@@ -67,19 +70,19 @@ public class ArrayStack implements Stack {
 	@Override
 	public Integer top() {
 		if (array[array.length-1] != null) {
-			return size = array[array.length-1];
+			return topValue = array[array.length-1];
 		}
 		else {
 			return null;
 		}
 	}
 	
-	private Integer[] ExpandArray(Integer[] array) {
-		Integer[] expandedArray = new Integer[array.length+5];
+	private void ExpandArray(Integer[] array) {
+		Integer[] exArray = new Integer[array.length+5];
 		for (int i = 0; i < array.length; i++) {
-			expandedArray[i+5] = array[i];
+			exArray[i+4] = array[i];
 		}
-		return expandedArray;
+		array = exArray;
 	}
 
 	@Override
@@ -88,14 +91,15 @@ public class ArrayStack implements Stack {
 			ExpandArray(array);
 		}
 		for (int i = 0; i < array.length-1; i++) {
-			array[i+1] = array[i];
+			array[i] = array[i+1];
 		}
+		size++;
 		array[array.length-1] = value;
 	}
 
 	@Override
 	public int size() {
-		size = array.length;
+		//size = array.length;
 		return size;
 		//return 0 clears the test?
 	}
