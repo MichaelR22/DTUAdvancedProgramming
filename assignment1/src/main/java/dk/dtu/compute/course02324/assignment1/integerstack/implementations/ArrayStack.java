@@ -1,7 +1,7 @@
 package dk.dtu.compute.course02324.assignment1.integerstack.implementations;
 
 import dk.dtu.compute.course02324.assignment1.integerstack.types.Stack;
-
+import java.util.Arrays;
 /**
  * Implements a {@link Stack} of integers by using a sufficiently large
  * array. Note that the array needs to be dynamically extended by
@@ -9,7 +9,7 @@ import dk.dtu.compute.course02324.assignment1.integerstack.types.Stack;
  * current length of the array.
  *
  * TODO note that this is template only, and the actual functions of
- *       the stack are not implemented yet. Impelemnting these methods
+ *       the stack are not implemented yet. Impelenting these methods
  *       is the task of assignment 1.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
@@ -40,64 +40,37 @@ public class ArrayStack implements Stack {
 	 */
 	private int size = 0;
 
-
 	@Override
 	public void clear() {
-		for (int i = 0; i < array.length; i++) {
-			array[i] = null; 
+		for(int i = 0; i < array.length; i++) {
+			array[i] = null;
 		}
 	}
 
 	@Override
 	public Integer pop() {
-		if (array[array.length-1] != null) {
-			size = array[array.length-1];
-			for (int i = array.length; i < array.length; i--) {
-				array[i] = array[i-1];
-			}
-			array[0] = null;
-			return size;
-			
-		}
-		else {
-			return null;
-		}
+		if (size == 0) return null;
+		Integer topValue = array[size - 1];
+		array[size - 1] = null;
+		size--;
+		return topValue;
 	}
 
 	@Override
 	public Integer top() {
-		if (array[array.length-1] != null) {
-			return size = array[array.length-1];
-		}
-		else {
-			return null;
-		}
-	}
-	
-	private Integer[] ExpandArray(Integer[] array) {
-		Integer[] expandedArray = new Integer[array.length+5];
-		for (int i = 0; i < array.length; i++) {
-			expandedArray[i+5] = array[i];
-		}
-		return expandedArray;
+		return (size == 0) ? null : array[size - 1];
 	}
 
 	@Override
 	public void push(Integer value) {
-		if (array[0] != null) {
-			ExpandArray(array);
+		if (size == array.length) {
+			array = Arrays.copyOf(array, array.length * 2);
 		}
-		for (int i = 0; i < array.length-1; i++) {
-			array[i+1] = array[i];
-		}
-		array[array.length-1] = value;
+		array[size++] = value;
 	}
 
 	@Override
 	public int size() {
-		size = array.length;
 		return size;
-		//return 0 clears the test?
 	}
-
 }
