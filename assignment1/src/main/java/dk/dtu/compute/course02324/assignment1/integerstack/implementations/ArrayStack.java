@@ -1,7 +1,8 @@
 package dk.dtu.compute.course02324.assignment1.integerstack.implementations;
 
-import dk.dtu.compute.course02324.assignment1.integerstack.types.Stack;
+import java.util.Arrays;
 
+import dk.dtu.compute.course02324.assignment1.integerstack.types.Stack;
 
 /**
  * Implements a {@link Stack} of integers by using a sufficiently large
@@ -40,59 +41,39 @@ public class ArrayStack implements Stack {
 	 * element should be located at <code>size-1</code> in this array.
 	 */
 	private int size = 0;
+	private int topValue;
 
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < array.length; i++) {
-			array[i] = null;
-		}
+		array = new Integer[DEFAULT_SIZE];
+		size = 0;
 	}
 
 	@Override
 	public Integer pop() {
-		if (array[array.length-1] != null) {
-//			topValue = array[array.length-1];
-//			for (int i = array.length; i > 1; i--) {
-//				array[i-1] = array[i-2];
-//			}
-
-			size--;
-			return size;
-			
-		}
-		else {
-			return null;
-		}
+		if (size == 0) return null;
+		topValue = array[size - 1];
+		array[size - 1] = null;
+		size--;
+		return topValue;
 	}
 
 	@Override
 	public Integer top() {
-		if (array[array.length-1] != null) {
-			return array[size-1];
+		if (size != 0) {
+			return array[size - 1];
 		}
 		else {
 			return null;
 		}
 	}
 	
-	private void ExpandArray(Integer[] array) {
-		Integer[] exArray = new Integer[array.length+5];
-		for (int i = 0; i < array.length; i++) {
-			exArray[i+4] = array[i];
-		}
-		array = exArray;
-	}
-
 	@Override
 	public void push(Integer value) {
-		if (array[0] != null) {
-			ExpandArray(array);
+		if (size == array.length) {
+			array = Arrays.copyOf(array, array.length * 2);
 		}
-//		for (int i = 0; i < array.length-1; i++) {
-//			array[i] = array[i+1];
-//		}
-
 		array[size++] = value;
 	}
 
@@ -100,4 +81,5 @@ public class ArrayStack implements Stack {
 	public int size() {
 		return size;
 	}
+
 }
