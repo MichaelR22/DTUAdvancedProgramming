@@ -1,0 +1,4 @@
+--patch-module
+dtu.course.course02324.assignment1=_
+--add-reads
+dtu.course.course02324.assignment1=ALL-UNNAMED
