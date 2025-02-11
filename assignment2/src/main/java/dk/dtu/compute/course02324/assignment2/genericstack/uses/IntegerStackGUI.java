@@ -101,9 +101,14 @@ public class IntegerStackGUI extends GridPane {
         Button popButton = new Button("Pop");
         popButton.setOnAction(
                 e -> {
-                    lastPopped = stack.pop();
-                    // makes sure that the GUI is updated accordingly
-                    update();
+                    try {
+                        lastPopped = stack.pop();
+                    } catch (IllegalStateException err) {
+                        textAreaExceptions.appendText("Oi!, "+err.getMessage()+"\n");
+                    } finally {
+                        // makes sure that the GUI is updated accordingly
+                        update();
+                    }
                 });
 
         // button for clearing the stack
@@ -111,6 +116,7 @@ public class IntegerStackGUI extends GridPane {
         clearButton.setOnAction(
                 e -> {
                     stack.clear();
+                    textAreaExceptions.setText("");
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -155,12 +161,12 @@ public class IntegerStackGUI extends GridPane {
         try {
             Integer top = stack.top();
             if (top == null) {
-                labelTop.setText("top: <null> ");
+                labelTop.setText("top: <none>");
             } else {
                 labelTop.setText("top: " + top);
             }
         } catch (Exception e) {
-            labelTop.setText("top: <none>");
+            labelTop.setText("top: "+e.getMessage());
         }
 
         if (lastPopped == null) {

@@ -80,17 +80,13 @@ public class ArrayStack implements Stack {
     @Override
     public void push(Integer value) {
         // TODO must be implemented
-        if (size!=array.length){
-            array[size] = value;
-            size++;
+        if (size==array.length){
+            Integer[] newArray = new Integer[size * 2];
+            System.arraycopy(array, 0, newArray, 0, size);
+            array = newArray;
         }
-        Integer[] newArray = new Integer[size*2];
-        for (int i = 0; i < size ; i++){
-            newArray[i] = array[i];
-        }
-        // System.arraycopy(array, 0, newArray, 0, size);
-        newArray[size] = value;
-        array = newArray;
+        array[size] = value;
+        size++;
     }
 
     @Override

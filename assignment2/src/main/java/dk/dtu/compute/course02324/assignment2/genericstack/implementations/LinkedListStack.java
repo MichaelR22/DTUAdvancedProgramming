@@ -34,9 +34,7 @@ public class LinkedListStack<E> implements Stack<E> {
             size--;
             return element;
         }
-        throw new IllegalStateException(
-                "Cannot pop from empty stack"
-        );
+        throw new IllegalStateException("Empty stack");
     }
 
     @Override

@@ -66,9 +66,7 @@ public class ArrayStack<E> implements Stack<E> {
             }
             return element;
         }
-        throw new IllegalStateException(
-                "Cannot pop from empty stack"
-        );
+        throw new IllegalStateException("Cannot pop from empty stack");
     }
 
     @Override
@@ -77,7 +75,7 @@ public class ArrayStack<E> implements Stack<E> {
         if (size != 0) {
             return array[size - 1];
         }
-        throw new IllegalStateException("Cannot check top on an empty stack");
+        throw new IllegalStateException("Empty stack");
     }
 
     @Override
