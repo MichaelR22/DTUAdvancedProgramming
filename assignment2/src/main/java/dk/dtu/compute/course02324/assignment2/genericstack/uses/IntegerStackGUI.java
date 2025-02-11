@@ -155,7 +155,7 @@ public class IntegerStackGUI extends GridPane {
         try {
             Integer top = stack.top();
             if (top == null) {
-                labelTop.setText("top: <null>");
+                labelTop.setText("top: <null> ");
             } else {
                 labelTop.setText("top: " + top);
             }
