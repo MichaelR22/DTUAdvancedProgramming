@@ -28,6 +28,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public E set(int pos, @NotNull E e) {
+        if (pos < 0 || pos >= size) throw new IndexOutOfBoundsException("The position doesn't exist");
         E helper = list[pos];
         list[pos] = e;
         return helper;
@@ -80,8 +81,13 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void sort(@NotNull Comparator<? super E> c) {
-        if (c == null) throw new IllegalArgumentException("Can't accept null value");
-        Arrays.sort(list, 0, size, c);
+        if (c == null) throw new IllegalArgumentException("Comparator cannot be null");
+
+        try {
+            Arrays.sort(list, 0, size, c);
+        } catch (UnsupportedOperationException e) {
+            throw new UnsupportedOperationException("Sorting is not supported for this list implementation", e);
+        }
     }
 
     private E[] createEmptyArray(int length) {

@@ -34,6 +34,8 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
      */
     private int findIndexToInsert(@NotNull E e) {
         // simple implementation finding the index in a linear way
+        if (e == null) throw new IllegalArgumentException("No null values, good sir");
+
 
         // TODO implementing and using this method might help you with
         //      a simple implementation of the add(E e) method.
