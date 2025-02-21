@@ -3,6 +3,8 @@ package dk.dtu.compute.course02324.assignment3.lists.uses;
 
 import dk.dtu.compute.course02324.assignment3.lists.implementations.GenericComparator;
 import dk.dtu.compute.course02324.assignment3.lists.types.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,6 +17,7 @@ import javafx.scene.layout.VBox;
 
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
+import java.util.HashMap;
 
 /**
  * A GUI element that is allows the user to interact and
@@ -33,6 +36,26 @@ public class PersonsGUI extends GridPane {
 
     private int weightCount = 1;
 
+    Label label_avg_w = new Label("Average Weight: \n"+0+" kg");
+
+    private double avg_weight() {
+        if (persons.isEmpty()) { return 0;}
+        double sum = 0;
+        for (int i = 0; i< persons.size(); i++) {
+            sum += persons.get(i).weight;
+        }
+        return sum / persons.size();
+    };
+
+    Label label_most_occuring = new Label("Most Occurring Name: \n"+"NA");
+
+    HashMap<String, Integer> name_counter = new HashMap<>();
+//
+//    int frequency_of_most_occ = 0;
+//    private String persons_mode(){
+//
+//    }
+
     /**
      * Constructor which sets up the GUI attached a list of persons.
      *
@@ -46,9 +69,32 @@ public class PersonsGUI extends GridPane {
         this.setHgap(5.0);
 
         // text filed for user entering a name
-        TextField field = new TextField();
-        field.setPrefColumnCount(5);
-        field.setText("name");
+        TextField name_field = new TextField();
+        name_field.setPrefColumnCount(5);
+        name_field.setText("name");
+
+        TextField w_field = new TextField();
+        w_field.setPrefColumnCount(5);
+        w_field.setText(Integer.toString(weightCount));
+        // the following is a simple way to make sure that the user can only
+        // enter Integer values to the text field
+        w_field.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                try {
+                    Integer.parseInt(newValue);
+                    w_field.setText(newValue);
+                } catch (NumberFormatException e) {
+                    if (newValue.isEmpty()) {
+                        w_field.setText("0");
+                    } else {
+                        w_field.setText(Integer.toString(weightCount));
+                    }
+                }
+            }
+
+        });
 
         // TODO for all buttons installed below, the actions need to properly
         //      handle (catch) exceptions, and it would be nice if the GUI
@@ -58,11 +104,46 @@ public class PersonsGUI extends GridPane {
         // button for adding a new person to the list (based on
         // the name in the text field (the weight is just incrementing)
         // TODO a text field for the weight could be added to this GUI
-        Button addButton = new Button("Add");
+        Button addButton = new Button("Add at the end of list");
         addButton.setOnAction(
                 e -> {
-                    Person person = new Person(field.getText(), weightCount++);
+                    Person person = new Person(name_field.getText(), Integer.parseInt(w_field.getText()));
                     persons.add(person);
+                    weightCount++;
+                    w_field.setText(Integer.toString(weightCount));
+                    // makes sure that the GUI is updated accordingly
+                    update();
+                });
+
+        TextField index = new TextField();
+        index.setPrefColumnCount(2);
+        index.setText("0");
+        w_field.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                try {
+                    Integer.parseInt(newValue);
+                    w_field.setText(newValue);
+                } catch (NumberFormatException e) {
+                    if (newValue.isEmpty()) {
+                        w_field.setText("0");
+                    } else {
+                        w_field.setText(oldValue);
+                    }
+                }
+            }
+
+        });
+
+        Button add_atIndexButton = new Button("Add at Index: ");
+        add_atIndexButton.setOnAction(
+                e -> {
+                    Person person = new Person(name_field.getText(), Integer.parseInt(w_field.getText()));
+                    persons.add(Integer.parseInt(index.getText()), person);
+                    weightCount++;
+                    w_field.setText(Integer.toString(weightCount));
+                    index.setText("0");
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -89,13 +170,28 @@ public class PersonsGUI extends GridPane {
                     update();
                 });
 
+        // -------------- GUIng --------------------
+
+        Label l_name = new Label("Name: ");
+        Label l_weight = new Label("Weight: ");
+        VBox name = new VBox(l_name, name_field);
+        name.setSpacing(5);
+        VBox weight = new VBox(l_weight, w_field);
+        weight.setSpacing(5);
+        HBox name_weight = new HBox(name,weight);
+        name_weight.setSpacing(10);
+        HBox add_at_index = new HBox(add_atIndexButton, index);
+        add_at_index.setSpacing(15);
         // combines the above elements into vertically arranged boxes
         // which are then added to the left column of the grid pane
-        VBox actionBox = new VBox(field, addButton, sortButton, clearButton);
-        actionBox.setSpacing(5.0);
+        VBox buttonBox = new VBox( name_weight, addButton, add_at_index, sortButton, clearButton);
+        buttonBox.setSpacing(10);
+
+        VBox valueBox = new VBox(label_avg_w);
+        VBox actionBox = new VBox(buttonBox, valueBox);
         this.add(actionBox, 0, 0);
 
-        // create the elements of the right column of the GUI
+        // create the elements of the right column of the GUI ------------------
         // (scrollable person list) ...
         Label labelPersonsList = new Label("Persons:");
 
@@ -128,6 +224,8 @@ public class PersonsGUI extends GridPane {
      * from the list.
      */
     private void update() {
+        label_avg_w.setText("Average Weight: \n"+avg_weight()+" kg");
+        //label_most_occuring.setText("Most Occurring Name: \n"+persons_mode());
         personsPane.getChildren().clear();
         // adds all persons to the list in the personsPane (with
         // a delete button in front of it)

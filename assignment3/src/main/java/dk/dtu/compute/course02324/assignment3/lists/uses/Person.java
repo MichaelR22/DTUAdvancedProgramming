@@ -23,7 +23,6 @@ public class Person implements Comparable<Person> {
             throw new IllegalArgumentException("Argument of compareTo() must not be null");
         }
         return name.compareTo(o.name);
-        // TODO this must be implemented properly according
         // throw new UnsupportedOperationException("This operation is not yet implemented");
     }
 
@@ -52,8 +51,9 @@ public class Person implements Comparable<Person> {
      * @return
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@NotNull Object o) {
         return super.equals(o);
+        // return name.equals(o.name) & weight == o.weight ;
 
         // TODO this must be implemented in accordance with the compareTo() method!
         //      See lectures for course 02324!
@@ -62,7 +62,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return name.hashCode();
 
         // TODO this must be implemented note that hashcode needs to be consistents
         //      with equals (o1.equals(o1) implies o1.hashCode() == o2.hashCode())!
