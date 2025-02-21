@@ -67,6 +67,7 @@ public class PersonsGUI extends GridPane {
 
     private void persons_mode(){
         frequency_of_most_occ = 0;
+        if (n_counter.isEmpty()) {max_name = "NA";}
         for (Person key : n_counter.keySet()) {
             if (n_counter.get(key) > frequency_of_most_occ) {
                 frequency_of_most_occ = n_counter.get(key);
@@ -191,6 +192,7 @@ public class PersonsGUI extends GridPane {
                 e -> {
                     persons.clear();
                     weightCount = 0;
+                    n_counter = new HashMap<>();
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
