@@ -19,29 +19,42 @@ public class LinkedListStack implements Stack {
     @Override
     public void clear() {
         // TODO must be implemented
+        top = null;
+        size = 0;
     }
 
     @Override
     public Integer pop() {
+        if (top!=null){
+            StackElement element = top;
+            top = element.next;
+            size--;
+            return element.value;
+        }
 
-        return 0;
+        return null;
     }
 
     @Override
     public Integer top() {
         // TODO must be implemented
-        return 0;
+        if (top!=null){
+            return top.value;
+        }
+        return null;
     }
 
     @Override
     public void push(Integer value) {
         // TODO must be implemented
+        top = new StackElement(value, top);
+        size++;
     }
 
     @Override
     public int size() {
         // TODO must be implemented
-        return -1;
+        return size;
     }
 
 

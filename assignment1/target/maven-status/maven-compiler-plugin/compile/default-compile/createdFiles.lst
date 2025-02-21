@@ -1,0 +1,8 @@
+dk/dtu/compute/course02324/assignment1/integerstack/implementations/LinkedListStack$StackElement.class
+module-info.class
+dk/dtu/compute/course02324/assignment1/integerstack/implementations/ArrayStack.class
+dk/dtu/compute/course02324/assignment1/integerstack/uses/IntegerStackGUI.class
+dk/dtu/compute/course02324/assignment1/integerstack/uses/IntegerStackApp.class
+dk/dtu/compute/course02324/assignment1/integerstack/types/Stack.class
+dk/dtu/compute/course02324/assignment1/integerstack/uses/IntegerStackGUI$1.class
+dk/dtu/compute/course02324/assignment1/integerstack/implementations/LinkedListStack.class

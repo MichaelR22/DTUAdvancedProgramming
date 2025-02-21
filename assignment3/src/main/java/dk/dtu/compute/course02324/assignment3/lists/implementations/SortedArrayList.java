@@ -18,8 +18,9 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
 
     @Override
     public boolean add(@NotNull E e) {
-        throw new UnsupportedOperationException("This operation is not yet implemented!");
-        // TODO needs implementation (Assignment 3b)
+        if (e == null ) {throw new IllegalArgumentException("cannot be null");}
+        this.add(findIndexToInsert(e),e);
+        return true;
     }
 
     /**
@@ -34,14 +35,14 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
      */
     private int findIndexToInsert(@NotNull E e) {
         // simple implementation finding the index in a linear way
-        if (e == null) throw new IllegalArgumentException("No null values, good sir");
+        int i=0;
+        while ( i<this.size() && e.compareTo(this.get(i))>0 ) {i++;}
+        return i;
+    }
 
-
-        // TODO implementing and using this method might help you with
-        //      a simple implementation of the add(E e) method.
-        //      (Assignment 3b)
-        return 0;
-
+    @Override
+    public void sort(@NotNull Comparator<? super E> c) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Can't sort sortedArrayList");
     }
 
 }

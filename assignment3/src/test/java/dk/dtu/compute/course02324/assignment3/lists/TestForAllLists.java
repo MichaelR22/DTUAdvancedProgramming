@@ -163,8 +163,8 @@ public abstract class TestForAllLists {
 
         for (int i=0; i<TEST_SIZE; i= i+2) {
             Assert.assertTrue(
-                    "Remove of existing element" + i + ". should return true",
-                    list.remove(i + ". Test"));
+                    "Remove of existing element " + i + ". should return true not"+list.indexOf(i+". Test")+list.get(0),
+                    list.remove(i+". Test"));
         }
 
         Assert.assertEquals(

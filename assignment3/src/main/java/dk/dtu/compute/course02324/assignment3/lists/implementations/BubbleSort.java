@@ -32,25 +32,17 @@ public class BubbleSort {
         }
         boolean swapped;
         int j = list.size();
-
         do {
             swapped = false;
-
-            for (int i = 0; i < j - 1; i++) {
-                if (comp.compare(list.get(i), list.get(i + 1)) > 0) {
-                    // Byt om på:
+            for (int i = 0; i+1<j; i++) {
+                if (comp.compare(list.get(i),list.get(i+1))>0) {
                     T temp = list.get(i);
-                    list.set(i, list.get(i + 1));
-                    list.set(i + 1, temp);
+                    list.set(i,list.get(i+1));
+                    list.set(i,temp);
                     swapped = true;
                 }
             }
             j--;
-            // TODO implement BubbleSort here (Assignment 3b) based on the code
-            //      from lectures adapted for the use of generic lists and
-            //      comparators (the lecture shows it for arrays of integers only.
-
         } while(swapped);
     }
-
 }

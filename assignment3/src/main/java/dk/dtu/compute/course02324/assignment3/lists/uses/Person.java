@@ -22,9 +22,9 @@ public class Person implements Comparable<Person> {
         if (o == null) {
             throw new IllegalArgumentException("Argument of compareTo() must not be null");
         }
-
+        return name.compareTo(o.name);
         // TODO this must be implemented properly according
-        throw new UnsupportedOperationException("This operation is not yet implemented");
+        // throw new UnsupportedOperationException("This operation is not yet implemented");
     }
 
     /**
