@@ -47,14 +47,33 @@ public class PersonsGUI extends GridPane {
         return sum / persons.size();
     };
 
-    Label label_most_occuring = new Label("Most Occurring Name: \n"+"NA");
+    Label label_most_occurring = new Label("Most Occurring Name: \n"+"NA");
 
-    HashMap<String, Integer> name_counter = new HashMap<>();
-//
-//    int frequency_of_most_occ = 0;
-//    private String persons_mode(){
-//
-//    }
+    private HashMap<String, Integer> n_counter = new HashMap<>();
+
+    private void add_to_map(String P) {
+        if (n_counter.containsKey(P)) {
+            n_counter.replace(P,n_counter.get(P)+1);
+            System.out.println(n_counter);
+        } else {
+            n_counter.put(P, 1);
+            System.out.println(n_counter);
+        }
+    }
+
+    int frequency_of_most_occ = 0;
+    String max_name = "no clue";
+    private String persons_mode(){
+        for (String key : n_counter.keySet()) {
+            if (n_counter.get(key) > frequency_of_most_occ) {
+                frequency_of_most_occ = n_counter.get(key);
+                max_name = key;
+            }
+        }
+        System.out.println(n_counter);
+        return max_name;
+
+    }
 
     /**
      * Constructor which sets up the GUI attached a list of persons.
@@ -111,6 +130,7 @@ public class PersonsGUI extends GridPane {
                     persons.add(person);
                     weightCount++;
                     w_field.setText(Integer.toString(weightCount));
+                    add_to_map(person.name);
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -144,6 +164,7 @@ public class PersonsGUI extends GridPane {
                     weightCount++;
                     w_field.setText(Integer.toString(weightCount));
                     index.setText("0");
+                    add_to_map(person.name);
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -166,6 +187,7 @@ public class PersonsGUI extends GridPane {
         clearButton.setOnAction(
                 e -> {
                     persons.clear();
+                    weightCount = 0;
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -187,8 +209,10 @@ public class PersonsGUI extends GridPane {
         VBox buttonBox = new VBox( name_weight, addButton, add_at_index, sortButton, clearButton);
         buttonBox.setSpacing(10);
 
-        VBox valueBox = new VBox(label_avg_w);
+        VBox valueBox = new VBox(label_avg_w, label_most_occurring);
+        valueBox.setSpacing(10);
         VBox actionBox = new VBox(buttonBox, valueBox);
+        actionBox.setSpacing(15);
         this.add(actionBox, 0, 0);
 
         // create the elements of the right column of the GUI ------------------
@@ -225,7 +249,8 @@ public class PersonsGUI extends GridPane {
      */
     private void update() {
         label_avg_w.setText("Average Weight: \n"+avg_weight()+" kg");
-        //label_most_occuring.setText("Most Occurring Name: \n"+persons_mode());
+        String common_name = persons_mode();
+        label_most_occurring.setText("Most Occurring Name: \n"+frequency_of_most_occ+" X "+common_name);
         personsPane.getChildren().clear();
         // adds all persons to the list in the personsPane (with
         // a delete button in front of it)
