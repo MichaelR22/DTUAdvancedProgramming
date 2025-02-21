@@ -7,10 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -47,11 +44,13 @@ public class PersonsGUI extends GridPane {
         return sum / persons.size();
     };
 
+    private TextArea textAreaExceptions;
+
     Label label_most_occurring = new Label("Most Occurring Name: \n"+"NA");
 
-    private HashMap<String, Integer> n_counter = new HashMap<>();
+    private HashMap<Person, Integer> n_counter = new HashMap<>();
 
-    private void add_to_map(String P) {
+    private void add_to_map(Person P) {
         if (n_counter.containsKey(P)) {
             n_counter.replace(P,n_counter.get(P)+1);
             System.out.println(n_counter);
@@ -61,18 +60,22 @@ public class PersonsGUI extends GridPane {
         }
     }
 
-    int frequency_of_most_occ = 0;
-    String max_name = "no clue";
+    private void delete_from_map(Person P) {
+        n_counter.replace(P,n_counter.get(P)-1);
+    }
+
+    int frequency_of_most_occ;
+
     private String persons_mode(){
-        for (String key : n_counter.keySet()) {
+        frequency_of_most_occ = 0;
+        String max_name = "NA";
+        for (Person key : n_counter.keySet()) {
             if (n_counter.get(key) > frequency_of_most_occ) {
                 frequency_of_most_occ = n_counter.get(key);
-                max_name = key;
+                max_name = key.name;
             }
         }
-        System.out.println(n_counter);
         return max_name;
-
     }
 
     /**
@@ -115,14 +118,8 @@ public class PersonsGUI extends GridPane {
 
         });
 
-        // TODO for all buttons installed below, the actions need to properly
-        //      handle (catch) exceptions, and it would be nice if the GUI
-        //      could also show the exceptions thrown by user actions on
-        //      button pressed (cf. Assignment 2).
-
         // button for adding a new person to the list (based on
         // the name in the text field (the weight is just incrementing)
-        // TODO a text field for the weight could be added to this GUI
         Button addButton = new Button("Add at the end of list");
         addButton.setOnAction(
                 e -> {
@@ -130,7 +127,7 @@ public class PersonsGUI extends GridPane {
                     persons.add(person);
                     weightCount++;
                     w_field.setText(Integer.toString(weightCount));
-                    add_to_map(person.name);
+                    add_to_map(person);
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -160,11 +157,15 @@ public class PersonsGUI extends GridPane {
         add_atIndexButton.setOnAction(
                 e -> {
                     Person person = new Person(name_field.getText(), Integer.parseInt(w_field.getText()));
-                    persons.add(Integer.parseInt(index.getText()), person);
+                    try {
+                        persons.add(Integer.parseInt(index.getText()), person);
+                    } catch (IndexOutOfBoundsException err) {
+                        textAreaExceptions.appendText(err.getMessage()+"\n");
+                    }
                     weightCount++;
                     w_field.setText(Integer.toString(weightCount));
                     index.setText("0");
-                    add_to_map(person.name);
+                    add_to_map(person);
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -177,7 +178,12 @@ public class PersonsGUI extends GridPane {
         Button sortButton = new Button("Sort");
         sortButton.setOnAction(
                 e -> {
-                    persons.sort(comparator);
+                    try {
+                        persons.sort(comparator);
+
+                    } catch (UnsupportedOperationException err) {
+                        textAreaExceptions.appendText(err.getMessage()+"\n");
+                    }
                     // makes sure that the GUI is updated accordingly
                     update();
                 });
@@ -194,6 +200,7 @@ public class PersonsGUI extends GridPane {
 
         // -------------- GUIng --------------------
 
+        this.setPadding(new Insets(5, 10, 5, 10)); // Top, Right, Bottom, Left
         Label l_name = new Label("Name: ");
         Label l_weight = new Label("Weight: ");
         VBox name = new VBox(l_name, name_field);
@@ -225,16 +232,29 @@ public class PersonsGUI extends GridPane {
         personsPane.setVgap(5);
 
         ScrollPane scrollPane = new ScrollPane(personsPane);
-        scrollPane.setMinWidth(300);
-        scrollPane.setMaxWidth(300);
+//        scrollPane.setMinWidth(300);
+//        scrollPane.setMaxWidth(300);
         scrollPane.setMinHeight(300);
         scrollPane.setMaxHeight(300);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
+        Label labelExceptions = new Label("Exceptions:");
+        textAreaExceptions = new TextArea();
+        textAreaExceptions.setWrapText(true);
+        textAreaExceptions.setText("");
+        textAreaExceptions.setEditable(false);
+        textAreaExceptions.setScrollTop(Double.MAX_VALUE);
+
+        ScrollPane scrollPane_e = new ScrollPane(textAreaExceptions);
+        scrollPane_e.setMinHeight(300);
+        scrollPane_e.setMaxHeight(300);
+        scrollPane_e.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane_e.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         // ... and adds these elements to the right-hand columns of
         // the grid pane
-        VBox personsList = new VBox(labelPersonsList, scrollPane);
+        VBox personsList = new VBox(labelPersonsList, scrollPane,labelExceptions, scrollPane_e);
         personsList.setSpacing(5.0);
         this.add(personsList, 1, 0);
 
@@ -261,6 +281,7 @@ public class PersonsGUI extends GridPane {
             deleteButton.setOnAction(
                     e -> {
                         persons.remove(person);
+                        delete_from_map(person);
                         update();
                     }
             );
@@ -270,10 +291,4 @@ public class PersonsGUI extends GridPane {
             personsPane.add(entry, 0, i);
         }
     }
-
-    // TODO this GUI could be extended by some additional widgets for issuing other
-    //      operations of lists. And the possibly thrown exceptions should be caught
-    //      in the event handler (and possibly shown in an additional text area for
-    //      exceptions; see Assignment 2).
-
 }
