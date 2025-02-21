@@ -52,19 +52,21 @@ public class Person implements Comparable<Person> {
      */
     @Override
     public boolean equals(@NotNull Object o) {
-        return super.equals(o);
-        // return name.equals(o.name) & weight == o.weight ;
+        if (!(o instanceof Person)) {return false;}
+        Person p = (Person)o;
+        return name.equals(p.name) ;//& weight == p.weight ;
 
-        // TODO this must be implemented in accordance with the compareTo() method!
+        //      this must be implemented in accordance with the compareTo() method!
         //      See lectures for course 02324!
         //      Also add JavaDocs for @param and @return !
     }
+
 
     @Override
     public int hashCode() {
         return name.hashCode();
 
-        // TODO this must be implemented note that hashcode needs to be consistents
+        //       this must be implemented note that hashcode needs to be consistents
         //      with equals (o1.equals(o1) implies o1.hashCode() == o2.hashCode())!
         //      See lectures for course 02324
         //      Also add JavaDocs should be added
