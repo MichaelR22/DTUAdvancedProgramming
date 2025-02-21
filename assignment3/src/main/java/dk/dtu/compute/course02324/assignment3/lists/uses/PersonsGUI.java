@@ -53,10 +53,8 @@ public class PersonsGUI extends GridPane {
     private void add_to_map(Person P) {
         if (n_counter.containsKey(P)) {
             n_counter.replace(P,n_counter.get(P)+1);
-            System.out.println(n_counter);
         } else {
             n_counter.put(P, 1);
-            System.out.println(n_counter);
         }
     }
 
@@ -64,18 +62,17 @@ public class PersonsGUI extends GridPane {
         n_counter.replace(P,n_counter.get(P)-1);
     }
 
-    int frequency_of_most_occ;
+    int frequency_of_most_occ = 0;
+    String max_name = "NA";
 
-    private String persons_mode(){
+    private void persons_mode(){
         frequency_of_most_occ = 0;
-        String max_name = "NA";
         for (Person key : n_counter.keySet()) {
             if (n_counter.get(key) > frequency_of_most_occ) {
                 frequency_of_most_occ = n_counter.get(key);
                 max_name = key.name;
             }
         }
-        return max_name;
     }
 
     /**
@@ -269,8 +266,8 @@ public class PersonsGUI extends GridPane {
      */
     private void update() {
         label_avg_w.setText("Average Weight: \n"+avg_weight()+" kg");
-        String common_name = persons_mode();
-        label_most_occurring.setText("Most Occurring Name: \n"+frequency_of_most_occ+" X "+common_name);
+        persons_mode();
+        label_most_occurring.setText("Most Occurring Name: \n"+frequency_of_most_occ+" X "+max_name);
         personsPane.getChildren().clear();
         // adds all persons to the list in the personsPane (with
         // a delete button in front of it)
